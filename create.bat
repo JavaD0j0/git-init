@@ -5,7 +5,7 @@ SET filename=%1
 REM We want to change directory to %USERPROFILE% now
 CD /d %USERPROFILE%
 
-IF %filename%=="" (
+IF "%1"=="" (
     ECHO "Error --> You need to enter a filename for this repository!"
     ECHO "Try again ..."
 ) ELSE (
