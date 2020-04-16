@@ -1,5 +1,6 @@
-import sys
 import os
+import sys
+# If we don't use PyGithub, we can always use Selenium as well to log in to GitHub
 from github import Github
 
 def promptEnd():
@@ -11,12 +12,13 @@ def main():
     # Gather basic info of where to place repository locally
     folder_name = str(sys.argv[1])
     path = os.environ.get("projectDir")
-    token = os.environ.get("gitToken")
+    token = os.environ.get("gToken")
     dir_ = path + '/' + folder_name
 
     # Connect to Github account and create repository
     gh = Github(token)
     user = gh.get_user()
+    print(f"Username: {user.name}\n") ##TESTING
     login = user.login
     repo = user.create_repo(folder_name)
 
@@ -36,7 +38,7 @@ def main():
     for c in commands:
         os.system(c)
 
-    print(f'{folder_name} created successfully...')
+    print(f'{folder_name} created successfully...\n')
     #os.system("code .")
 
 if __name__ == "__main__":

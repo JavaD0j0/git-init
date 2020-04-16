@@ -17,7 +17,7 @@ pip install -r requirements.txt
 ```
 Under System Variables add the following entries:
 1. "projectDir" = project directory where you want repos to be saved
-2. "gitToken" = your github token which you can find in your GitHub account
+2. "gToken" = your github token which you can find in your GitHub account
 ```
 - Also, we need to add a PATH to the repo so we can call **create** from anywhere...
 ```
