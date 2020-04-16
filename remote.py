@@ -2,33 +2,37 @@ import sys
 import os
 from github import Github
 
-# Gather basic info of where to place repository locally
-folder_name = str(sys.argv[1])
-path = os.environ.get("projectDir")
-token = os.environ.get("gitToken")
-dir_ = path + '/' + folder_name
+def main():
+    # Gather basic info of where to place repository locally
+    folder_name = str(sys.argv[1])
+    path = os.environ.get("projectDir")
+    token = os.environ.get("gitToken")
+    dir_ = path + '/' + folder_name
 
-# Connect to Github account and create repository
-gh = Github(token)
-user = gh.get_user()
-login = user.login
-repo = user.create_repo(folder_name)
+    # Connect to Github account and create repository
+    gh = Github(token)
+    user = gh.get_user()
+    login = user.login
+    repo = user.create_repo(folder_name)
 
-commands = [
-    f'ECHO "# {repo.name}" >> README.md',
-    'git init',
-    f'git remote add origin https://github.com/{login}/{folder_name}.git',
-    'git add .',
-    'git commit -m "Initial commit"',
-    'git push -u origin master'
-]
+    commands = [
+        f'ECHO "# {repo.name}" >> README.md',
+        'git init',
+        f'git remote add origin https://github.com/{login}/{folder_name}.git',
+        'git add .',
+        'git commit -m "Initial commit"',
+        'git push -u origin master'
+    ]
 
-# Now we need to call the commands
-os.mkdir(dir_)
-os.chdir(dir_)
+    # Now we need to call the commands
+    os.mkdir(dir_)
+    os.chdir(dir_)
 
-for c in commands:
-    os.system(c)
+    for c in commands:
+        os.system(c)
 
-print(f'{folder_name} created successfully...')
-os.system("code .")
+    print(f'{folder_name} created successfully...')
+    os.system("code .")
+
+if __name__ == "__main__":
+    main()
