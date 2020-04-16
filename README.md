@@ -15,9 +15,16 @@ pip install -r requirements.txt
 ### Set-Up:
 - In order to connect to GitHub and have a determined project folder, we need to make some environment additions...
 ```
-Go to your environments and add the following:
-1. project directory = "projectDir"
-2. github token = "gitToken"
+Under System Variables add the following entries:
+1. "projectDir" = project directory where you want repos to be saved
+2. "gitToken" = your github token which you can find in your GitHub account
+```
+- Also, we need to add a PATH to the repo so we can call **create** from anywhere...
+```
+Under System Variables, go to Path and add a new entry with the path of where you cloned the repo in your machine.
+1. C:\"pathToDirectoryWhereRepoIsAt\GitInit\
+Example:
+    - C:\%USERPROFILE%\GitInit\
 ```
 
 ### Hot to Use:
