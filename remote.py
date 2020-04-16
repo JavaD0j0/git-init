@@ -2,6 +2,11 @@ import sys
 import os
 from github import Github
 
+def promptEnd():
+    response = input("Do you want to open files with VS Code? (Y/N)")
+    if response == 'Y' or response == 'y':
+        os.system("code .")
+
 def main():
     # Gather basic info of where to place repository locally
     folder_name = str(sys.argv[1])
@@ -32,7 +37,8 @@ def main():
         os.system(c)
 
     print(f'{folder_name} created successfully...')
-    os.system("code .")
+    #os.system("code .")
 
 if __name__ == "__main__":
     main()
+    promptEnd()
