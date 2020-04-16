@@ -1,11 +1,11 @@
 @ECHO OFF
 SET filename=%1
+SET currDir=%cd%
 
-:: This command will expand to the drive letter and path in which the batch file
-:: is located (which cannot change) 
-:: CD /d %USERPROFILE%\GitInit
+:: This command refers to the full path to the batch file directory
+:: (which cannot change) 
 CD /d %~dp0
-ECHO "Current dir is %~dp0"
+ECHO "Batch file directory is %~dp0"
 
 If "%filename%"=="" (
     ECHO "Error --> You need to enter a filename for this repository!"
@@ -14,4 +14,5 @@ If "%filename%"=="" (
     python remote.py %filename%
 )
 
+CD %currDir%
 PAUSE
