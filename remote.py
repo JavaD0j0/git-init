@@ -48,10 +48,12 @@ def main():
     # Connect to Github account and create repository
     gh = Github(token)
     user = gh.get_user()
-    print(f"Username: {user.name}") ##TESTING
+    print("-"*40)
+    print(f"\tUsername: {user.name}") ##TESTING
     login = user.login
     repo = user.create_repo(folder_name, private=type_)
-    print(f'{repo.name} repo created in Github!\n') ##TESTING
+    print(f'\t{repo.name} repo created in Github!\n') ##TESTING
+    print("-"*40)
 
     # Execute Git Commands
     callCommands(repo, login, dir_, folder_name)
