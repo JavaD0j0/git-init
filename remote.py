@@ -1,7 +1,7 @@
 import os
 import sys
 # If we don't use PyGithub, we can always use Selenium as well to log in to GitHub
-from github import Github
+from github import Github, GithubException
 
 def promptEnd():
     response = input("Do you want to open files with VS Code? (Y/N) ")
@@ -13,6 +13,15 @@ def promptFirst():
     response = input("Do you want this repo to be private? (Y/N) ")
     return True if response == 'Y' or response == 'y' else False
         
+
+def checkForRepo(user, folder_name, type_):
+    try:
+        return user.create_repo(folder_name, private=type_)
+    except GithubException:
+        print(f'\t{folder_name} already exists. Use a different name for your project!')
+        print('\tMoving you to the project folder...')
+        print('-'*45)
+        sys.exit(-1)    
 
 def callCommands(repo, login, dir_, folder_name):
     commands = [
@@ -48,17 +57,21 @@ def main():
     # Connect to Github account and create repository
     gh = Github(token)
     user = gh.get_user()
-    print("-"*45)
-    print(f"\tUsername: {user.name}") ##TESTING
+    print('-'*45)
+    print(f'\tUsername: {user.name}') ##TESTING
     login = user.login
-    repo = user.create_repo(folder_name, private=type_)
+
+    # Check if repo already exists, if not create it
+    repo = checkForRepo(user, folder_name, type_) 
+    #repo = user.create_repo(folder_name, private=type_)
     print(f'\t{repo.name} repo created in Github!') ##TESTING
-    print("-"*45)
+    print('-'*45)
 
     # Execute Git Commands
     callCommands(repo, login, dir_, folder_name)
 
+    # Ask if files should be open with VS Code
+    promptEnd()
 
 if __name__ == "__main__":
     main()
-    promptEnd()
