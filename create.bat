@@ -1,6 +1,6 @@
 @ECHO OFF
 SET filename=%1
-SET currDir=%cd%
+:: SET currDir=%cd%
 
 :: This command refers to the full path to the batch file directory
 :: (which cannot change) 
@@ -14,5 +14,6 @@ If "%filename%"=="" (
     python remote.py %filename%
 )
 
-CD %currDir%
+:: Redirect user straight to newly creatred project folder
+CD %projectDir%\%filename%
 PAUSE
