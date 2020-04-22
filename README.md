@@ -8,7 +8,7 @@ This repo is to help you speed up the process of creating your project repositor
 ### How to Install:
 ```
 git clone "https://github.com/mronfire/git-init.git"
-cd GitInit
+cd git-init
 pip install -r requirements.txt
 ```
 
@@ -22,9 +22,9 @@ Under System Variables add the following entries:
 - Also, we need to add the PATH of the repo so we can call **create** from anywhere in the command prompt...
 ```
 Under System Variables, go to Path and add a new entry with the path of where you cloned the repo in your machine.
-1. C:\"pathToDirectoryWhereRepoIsAt\GitInit\
+1. C:\"pathToDirectoryWhereRepoIsAt\git-init\
 Example:
-    - C:\%USERPROFILE%\GitInit\
+    - C:\%USERPROFILE%\git-init\
 ```
 
 ### Hot to Use:
