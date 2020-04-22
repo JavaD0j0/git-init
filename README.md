@@ -7,7 +7,7 @@ This repo is to help you speed up the process of creating your project repositor
 
 ### How to Install:
 ```
-git clone "https://github.com/mronfire/GitInit.git"
+git clone "https://github.com/mronfire/git-init.git"
 cd GitInit
 pip install -r requirements.txt
 ```
