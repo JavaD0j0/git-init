@@ -43,6 +43,24 @@ def callCommands(repo, login, dir_, folder_name):
 
     print(f'{folder_name} created successfully...\n')
 
+def createVirtualEnv(folder_name):
+    response = input("Do you want to create a virtual environment for your project? (Y/N) ")
+    if response == 'Y' or response == 'y':
+        commands = [
+            f'mkvirtualenv {folder_name}'#,
+            # f'workon {folder_name}',
+            # 'setprojectdir .',
+            # 'pip freeze > requirements.txt'
+        ]
+
+        for c in commands:
+            os.system(c)
+
+        print(f'\nVirtual Env for {folder_name} is created...')
+        #print("We have created requirements.txt with current pip packages...\n")
+    else:
+        print("Not creating a virtual environment!")
+
 
 def main():
     # Gather basic info of where to place repository locally
@@ -69,6 +87,9 @@ def main():
 
     # Execute Git Commands
     callCommands(repo, login, dir_, folder_name)
+
+    # Create virtual enviroment
+    createVirtualEnv(folder_name)
 
     # Ask if files should be open with VS Code
     promptEnd()

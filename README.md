@@ -5,6 +5,8 @@
 This repo is to help you speed up the process of creating your project repositories with the execution of just one command.
 **Instead of ~~6-plus~~ git commands, just run 1 and be done with it!** 
 
+By running this script, you will have a project directory in your designated location. A project repo will be added to your GitHub Account with a README.md file and the requirements.txt file added and pushed to the remote repo as the initial commit. Lastly a virtal environment will be created and set project directory to current project location.
+
 ### How to Install:
 ```
 git clone "https://github.com/mronfire/GitInit.git"
