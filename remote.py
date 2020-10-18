@@ -21,7 +21,11 @@ def checkForRepo(user, folder_name, type_):
         print(f'\t{folder_name} already exists. Use a different name for your project!')
         print('\tMoving you to the project folder...')
         print('-'*45)
-        sys.exit(-1)    
+        sys.exit(-1) 
+
+def createDir(dir):
+    os.mkdir(dir)
+    os.chdir(dir)
 
 def callCommands(repo, login, dir_, folder_name):
     commands = [
@@ -33,9 +37,8 @@ def callCommands(repo, login, dir_, folder_name):
         'git push -u origin master'
     ]
 
-    # Move to project directory and create folder
-    os.mkdir(dir_)
-    os.chdir(dir_)
+    # Create directory and move to it
+    createDir(dir_)
 
     # Execute commands
     for c in commands:
@@ -65,28 +68,32 @@ def createVirtualEnv(folder_name):
 def main():
     # Gather basic info of where to place repository locally
     folder_name = str(sys.argv[1])
+    local = str(sys.argv[2])
     path = os.environ.get("projectDir")
     token = os.environ.get("gToken")
     dir_ = path + '/' + folder_name
 
-    # Ask if repo will be private or not
-    type_ = promptFirst()
+    if local != "-l":
+        # Ask if repo will be private or not
+        type_ = promptFirst()
 
-    # Connect to Github account and create repository
-    gh = Github(token)
-    user = gh.get_user()
-    print('-'*45)
-    print(f'\tUsername: {user.name}') ##TESTING
-    login = user.login
+        # Connect to Github account and create repository
+        gh = Github(token)
+        user = gh.get_user()
+        print('-'*45)
+        print(f'\tUsername: {user.name}') ##TESTING
+        login = user.login
 
-    # Check if repo already exists, if not create it
-    repo = checkForRepo(user, folder_name, type_) 
-    #repo = user.create_repo(folder_name, private=type_)
-    print(f'\t{repo.name} repo created in Github!') ##TESTING
-    print('-'*45)
+        # Check if repo already exists, if not create it
+        repo = checkForRepo(user, folder_name, type_) 
+        #repo = user.create_repo(folder_name, private=type_)
+        print(f'\t{repo.name} repo created in Github!') ##TESTING
+        print('-'*45)
 
-    # Execute Git Commands
-    callCommands(repo, login, dir_, folder_name)
+        # Execute Git Commands
+        callCommands(repo, login, dir_, folder_name)
+    else:
+        createDir(dir_)
 
     # Create virtual enviroment
     createVirtualEnv(folder_name)
