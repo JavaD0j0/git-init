@@ -31,6 +31,7 @@ Example:
 ```
 
 ### Hot to Use:
+- Make sure ```<project_name>``` is all one word (i.e. create helloWorld) 
 ```
 create <project_name>
 ```

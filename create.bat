@@ -13,8 +13,10 @@ IF "%filename%"=="" (
 ) ELSE (
     IF "%local%"=="-l" (
         ECHO "Creating project locally..."
-    ) 
-    python remote.py %filename% %local%
+        python remote.py %filename% %local%
+    ) ELSE (
+        python remote.py %filename%
+    )
 )
 
 :: Redirect user straight to newly creatred project folder
