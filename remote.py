@@ -67,11 +67,11 @@ def createVirtualEnv(folder_name):
 
 def main():
     # Gather basic info of where to place repository locally
-    # print(f"*** len(sys.argv) = {len(sys.argv)} ***")
+    # print(f"*** len(sys.argv) = {len(sys.argv)} : {sys.argv} ***")
     folder_name = str(sys.argv[1])
     local = ""
-    if len(sys.argv) >= 2:
-        local = str(sys.argv[2])\
+    if len(sys.argv) > 2:
+        local = str(sys.argv[2])
 
     path = os.environ.get("projectDir")
     token = os.environ.get("gToken")
