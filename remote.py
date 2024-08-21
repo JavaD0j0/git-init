@@ -12,7 +12,7 @@ def promptEnd():
 def promptFirst():
     response = input("Do you want this repo to be private? (Y/N) ")
     return True if response == 'Y' or response == 'y' else False
-        
+
 
 def checkForRepo(user, folder_name, type_):
     try:
@@ -21,11 +21,13 @@ def checkForRepo(user, folder_name, type_):
         print(f'\t{folder_name} already exists. Use a different name for your project!')
         print('\tMoving you to the project folder...')
         print('-'*45)
-        sys.exit(-1) 
+        sys.exit(-1)
+
 
 def createDir(dir):
     os.mkdir(dir)
     os.chdir(dir)
+
 
 def callCommands(repo, login, dir_, folder_name):
     commands = [

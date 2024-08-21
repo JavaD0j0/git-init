@@ -1,4 +1,16 @@
-#### Requirements without version specifier ####
 ## -> PyGithub is a python library to use the Github API v3. With it, we can manage
 ##      Github resources from python scripts
-PyGithub
+PyGithub==2.3.0
+certifi==2024.7.4
+cffi==1.17.0
+charset-normalizer==3.3.2
+cryptography==43.0.0
+Deprecated==1.2.14
+idna==3.7
+pycparser==2.22
+PyJWT==2.9.0
+PyNaCl==1.5.0
+requests==2.32.3
+typing_extensions==4.12.2
+urllib3==2.2.2
+wrapt==1.16.0
