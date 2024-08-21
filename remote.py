@@ -1,35 +1,75 @@
 import os
 import sys
-# If we don't use PyGithub, we can always use Selenium as well to log in to GitHub
 from github import Github, GithubException
 
-def promptEnd():
+
+def prompt_end():
+    """
+    Prompts the user to open the project folder with VS Code.
+
+    If the user responds with 'Y' or 'y', the folder is opened in VS Code.
+    """
     response = input("Do you want to open files with VS Code? (Y/N) ")
-    if response == 'Y' or response == 'y':
+    if response.lower() == 'y':
         os.system("code .")
 
 
-def promptFirst():
+def prompt_first():
+    """
+    Prompts the user to decide if the GitHub repository should be private.
+
+    Returns:
+        bool: True if the user wants a private repository, False otherwise.
+    """
     response = input("Do you want this repo to be private? (Y/N) ")
-    return True if response == 'Y' or response == 'y' else False
+    return response.lower() == 'y'
 
 
-def checkForRepo(user, folder_name, type_):
+def check_for_repo(user, folder_name, private):
+    """
+    Checks if the repository already exists for the user. If it doesn't, creates a new repository.
+
+    Args:
+        user (github.AuthenticatedUser.AuthenticatedUser): Authenticated GitHub user.
+        folder_name (str): Name of the repository to be created.
+        private (bool): Determines if the repository should be private.
+
+    Returns:
+        github.Repository.Repository: The created repository.
+
+    Raises:
+        SystemExit: If the repository already exists.
+    """
     try:
-        return user.create_repo(folder_name, private=type_)
+        return user.create_repo(folder_name, private=private)
     except GithubException:
         print(f'\t{folder_name} already exists. Use a different name for your project!')
         print('\tMoving you to the project folder...')
-        print('-'*45)
+        print('-' * 45)
         sys.exit(-1)
 
 
-def createDir(dir):
-    os.mkdir(dir)
-    os.chdir(dir)
+def create_dir(directory):
+    """
+    Creates a directory and changes the current working directory to it.
+
+    Args:
+        directory (str): The directory path to create.
+    """
+    os.mkdir(directory)
+    os.chdir(directory)
 
 
-def callCommands(repo, login, dir_, folder_name):
+def call_commands(repo, login, dir_, folder_name):
+    """
+    Executes a series of git commands to initialize a new repository and push the initial commit.
+
+    Args:
+        repo (github.Repository.Repository): The GitHub repository object.
+        login (str): The GitHub login username.
+        dir_ (str): The local directory to initialize the repository in.
+        folder_name (str): The name of the repository folder.
+    """
     commands = [
         f'ECHO # {repo.name} >> README.md',
         'git init',
@@ -39,37 +79,40 @@ def callCommands(repo, login, dir_, folder_name):
         'git push -u origin master'
     ]
 
-    # Create directory and move to it
-    createDir(dir_)
+    create_dir(dir_)
 
-    # Execute commands
-    for c in commands:
-        os.system(c)
+    for command in commands:
+        os.system(command)
 
     print(f'{folder_name} created successfully...\n')
 
-def createVirtualEnv(folder_name):
+
+def create_virtual_env(folder_name):
+    """
+    Prompts the user to create a virtual environment for the project and executes the necessary commands if confirmed.
+
+    Args:
+        folder_name (str): The name of the project folder.
+    """
     response = input("Do you want to create a virtual environment for your project? (Y/N) ")
-    if response == 'Y' or response == 'y':
+    if response.lower() == 'y':
         commands = [
-            f'mkvirtualenv {folder_name}'#,
-            # f'workon {folder_name}',
-            # 'setprojectdir .',
-            # 'pip freeze > requirements.txt'
+            f'mkvirtualenv {folder_name}'
         ]
 
-        for c in commands:
-            os.system(c)
+        for command in commands:
+            os.system(command)
 
         print(f'\nVirtual Env for {folder_name} is created...')
-        #print("We have created requirements.txt with current pip packages...\n")
     else:
         print("Not creating a virtual environment!")
 
 
 def main():
-    # Gather basic info of where to place repository locally
-    # print(f"*** len(sys.argv) = {len(sys.argv)} : {sys.argv} ***")
+    """
+    The main function that orchestrates the creation of a GitHub repository, initializes a local repository,
+    and optionally sets up a virtual environment and opens the project in VS Code.
+    """
     folder_name = str(sys.argv[1])
     local = ""
     if len(sys.argv) > 2:
@@ -77,35 +120,28 @@ def main():
 
     path = os.environ.get("projectDir")
     token = os.environ.get("gToken")
-    dir_ = path + '/' + folder_name
+    dir_ = os.path.join(path, folder_name)
 
     if local != "-l":
-        # Ask if repo will be private or not
-        type_ = promptFirst()
+        private = prompt_first()
 
-        # Connect to Github account and create repository
         gh = Github(token)
         user = gh.get_user()
-        print('-'*45)
-        print(f'\tUsername: {user.name}') ##TESTING
+        print('-' * 45)
+        print(f'\tUsername: {user.name}')
         login = user.login
 
-        # Check if repo already exists, if not create it
-        repo = checkForRepo(user, folder_name, type_) 
-        #repo = user.create_repo(folder_name, private=type_)
-        print(f'\t{repo.name} repo created in Github!') ##TESTING
-        print('-'*45)
+        repo = check_for_repo(user, folder_name, private)
+        print(f'\t{repo.name} repo created in GitHub!')
+        print('-' * 45)
 
-        # Execute Git Commands
-        callCommands(repo, login, dir_, folder_name)
+        call_commands(repo, login, dir_, folder_name)
     else:
-        createDir(dir_)
+        create_dir(dir_)
 
-    # Create virtual enviroment
-    createVirtualEnv(folder_name)
+    create_virtual_env(folder_name)
+    prompt_end()
 
-    # Ask if files should be open with VS Code
-    promptEnd()
 
 if __name__ == "__main__":
     main()

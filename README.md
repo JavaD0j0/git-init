@@ -12,7 +12,7 @@ By running this script, you will have a project directory in your designated loc
 ## How to Install
 
 ```bash
-git clone "https://github.com/mronfire/git-init.git"
+git clone "https://github.com/JavaD0j0/git-init.git"
 cd git-init
 pip install -r requirements.txt
 ```
