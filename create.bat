@@ -5,7 +5,7 @@ SET local=%2
 :: This command refers to the full path to the batch file directory
 :: (which cannot change) 
 CD /d %~dp0
-ECHO "Batch file directory is %~dp0"
+@REM ECHO "Batch file directory is %~dp0"
 
 IF "%filename%"=="" (
     ECHO "Error --> You need to enter a filename for this repository!"
@@ -19,7 +19,7 @@ IF "%filename%"=="" (
     )
 
     :: Redirect user straight to newly creatred project folder
-    CD %projectDir%\%filename%
+    CD %PROJECT_DIR%\%filename%
 )
 
 PAUSE
