@@ -17,8 +17,9 @@ IF "%filename%"=="" (
     ) ELSE (
         python remote.py %filename%
     )
+
+    :: Redirect user straight to newly creatred project folder
+    CD %projectDir%\%filename%
 )
 
-:: Redirect user straight to newly creatred project folder
-CD %projectDir%\%filename%
 PAUSE
