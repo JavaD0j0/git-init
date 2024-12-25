@@ -5,6 +5,10 @@ and optionally sets up a virtual environment and opens the project in VS Code.
 import os
 import sys
 from github import Github, GithubException
+from rich.console import Console
+from rich.prompt import Prompt, Confirm
+
+console = Console()
 
 def prompt_user(prompt_message, options=None):
     """
@@ -18,9 +22,9 @@ def prompt_user(prompt_message, options=None):
         str: The user's validated response.
     """
     while True:
-        response = input(prompt_message).strip().lower()
+        response = Prompt.ask(f"[bold cyan]{prompt_message}[/bold cyan]", choices=options).strip().lower()
         if options and response not in options:
-            print(f"Invalid input. Please choose from {options}.")
+            console.print(f"[bold red]Invalid input. Please choose from {options}.[/bold red]")
         else:
             return response
 
@@ -30,7 +34,7 @@ def prompt_end():
 
     If the user responds with 'Y' or 'y', the folder is opened in VS Code.
     """
-    if prompt_user("Would you like to open the project in VS Code? (Y/N): ", ["y", "n"]) == 'y':
+    if Confirm.ask("[bold green]Would you like to open the project in VS Code?[/bold green]", default=False):
         os.system("code .")
 
 def prompt_first():
@@ -40,7 +44,7 @@ def prompt_first():
     Returns:
         bool: True if the user wants a private repository, False otherwise.
     """
-    return prompt_user("Should the GitHub repository be private? (Y/N): ", ["y", "n"]) == 'y'
+    return Confirm.ask("[bold green]Should the GitHub repository be private?[/bold green]", default=True)
 
 def check_for_repo(user, folder_name, private):
     """
@@ -60,9 +64,8 @@ def check_for_repo(user, folder_name, private):
     try:
         return user.create_repo(folder_name, private=private)
     except GithubException:
-        print(f'\tThe repository "{folder_name}" already exists. Please choose a different name for your project.')
-        print('\tNavigating to the project folder...')
-        print('-' * 45)
+        console.print(f"[bold red]The repository \"{folder_name}\" already exists. Please choose a different name for your project.[/bold red]")
+        console.rule()
         sys.exit(-1)
 
 def create_dir(directory):
@@ -86,32 +89,33 @@ def call_commands(repo, login, dir_, folder_name):
         folder_name (str): The name of the repository folder.
     """
     commands = [
-        f'ECHO # {repo.name} >> README.md',
-        'ECHO .venv/ >> .gitignore',
-        'ECHO .vscode/ >> .gitignore',
-        'ECHO __pycache__/ >> .gitignore',
-        'git init',
-        f'git remote add origin https://github.com/{login}/{folder_name}.git',
-        'git add .',
-        'git commit -m "Initial commit"',
-        'git push -u origin master'
+        f"ECHO # {repo.name} >> README.md",
+        "ECHO .venv/ >> .gitignore",
+        "ECHO .vscode/ >> .gitignore",
+        "ECHO __pycache__/ >> .gitignore",
+        "git init",
+        f"git remote add origin https://github.com/{login}/{folder_name}.git",
+        "git add .",
+        "git commit -m \"Initial commit\"",
+        "git push -u origin master"
     ]
 
     create_dir(dir_)
     for command in commands:
+        console.print(f"[bold magenta]Running:[/bold magenta] {command}")
         os.system(command)
 
-    print(f'The repository "{folder_name}" has been successfully created and pushed to GitHub.\n')
+    console.print(f"[bold green]The repository \"{folder_name}\" has been successfully created and pushed to GitHub.[/bold green]\n")
 
 def create_virtual_env():
     """
     Prompts the user to create a virtual environment for the project and executes the necessary commands if confirmed.
     """
-    if prompt_user("Would you like to create a virtual environment for your project? (Y/N): ", ["y", "n"]) == 'y':
+    if Confirm.ask("[bold green]Would you like to create a virtual environment for your project?[/bold green]", default=True):
         os.system("python -m venv .venv")
-        print('\nVirtual environment has been created.')
+        console.print("[bold green]Virtual environment has been created.[/bold green]")
     else:
-        print("Virtual environment creation skipped.")
+        console.print("[bold yellow]Virtual environment creation skipped.[/bold yellow]")
 
 def main():
     """
@@ -123,7 +127,7 @@ def main():
 
     path = os.environ.get("PROJECT_DIR")
     token = os.environ.get("GITHUB_TOKEN")
-    print(f'Creating repository "{folder_name}" in {path}...')
+    console.print(f"[bold cyan]Creating repository \"{folder_name}\" in {path}...[/bold cyan]")
     dir_ = os.path.join(path, folder_name)
 
     if local != "-l":
@@ -131,13 +135,13 @@ def main():
 
         gh = Github(token)
         user = gh.get_user()
-        print('-' * 50)
-        print(f'\tUsername: {user.name}')
+        console.rule("GitHub User Details")
+        console.print(f"[bold yellow]Username:[/bold yellow] {user.name}")
         login = user.login
 
         repo = check_for_repo(user, folder_name, private)
-        print(f'\tThe repository "{repo.name}" has been created on GitHub.')
-        print('-' * 50)
+        console.print(f"[bold green]The repository \"{repo.name}\" has been created on GitHub.[/bold green]")
+        console.rule()
 
         call_commands(repo, login, dir_, folder_name)
     else:
